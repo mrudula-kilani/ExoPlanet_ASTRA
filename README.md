@@ -40,12 +40,11 @@ Make sure you have the following installed:
 3. Run the main prediction script:
     ```bash
    python earth_like_planet_prediction.py
-  View results:
-
-Check generated plots in the images/ folder
-
-Open exo_planet_predictor.html in a browser to view the web interface
-
+4. View results:
+   Check generated plots in the images/ folder
+   Open exo_planet_predictor.html in a browser to view the web interface
+   
+## 📁 Project Structure
 
 ExoPlanet_ASTRA/
 │
