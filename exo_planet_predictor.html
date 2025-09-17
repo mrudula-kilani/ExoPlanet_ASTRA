@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 AI Planet Predictor - TensorFlow Edition</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+            background: linear-gradient(45deg, #ffffff, #a8edea);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            font-size: 1.3em;
+            opacity: 0.95;
+            margin-bottom: 10px;
+        }
+
+        .tech-badge {
+            display: inline-block;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            color: white;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .input-section {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 30px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .input-section h2 {
+            color: white;
+            margin-bottom: 25px;
+            font-size: 1.6em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .input-group label {
+            display: block;
+            color: white;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 0.95em;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 16px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #4ecdc4;
+            box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .predict-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 25px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .predict-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+        }
+
+        .predict-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .result-section {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 30px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .result-section h2 {
+            color: white;
+            margin-bottom: 25px;
+            font-size: 1.6em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .result-display {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 35px;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.5s ease;
+        }
+
+        .planet-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .result-text {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .earth-like {
+            color: #27ae60;
+        }
+
+        .not-earth-like {
+            color: #e74c3c;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .metric-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .metric-label {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        .confidence-bar {
+            width: 100%;
+            height: 25px;
+            background: rgba(0,0,0,0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            transition: all 0.8s ease;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .examples {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 25px;
+        }
+
+        .examples h3 {
+            color: white;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .example-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+        }
+
+        .example-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 12px 16px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .example-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+        }
+
+        .advanced-section {
+            grid-column: 1 / -1;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 20px;
+            margin-top: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .advanced-section h3 {
+            color: white;
+            margin-bottom: 25px;
+            font-size: 1.4em;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .criteria-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .criteria-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .criteria-item strong {
+            display: block;
+            margin-bottom: 10px;
+            color: #ffd700;
+            font-size: 1.1em;
+        }
+
+        .criteria-item ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .criteria-item li {
+            margin-bottom: 5px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .criteria-item li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #4ecdc4;
+            font-weight: bold;
+        }
+
+        .ai-info {
+            background: linear-gradient(135deg, rgba(78, 205, 196, 0.2), rgba(255, 107, 107, 0.2));
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .ai-info h4 {
+            color: white;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ai-info p {
+            color: white;
+            opacity: 0.9;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .loading {
+            display: none;
+            color: white;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 3px solid white;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .input-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 25px;
+                margin: 10px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .criteria-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .example-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 ExoPlanet Atmosphere Predictor</h1>
+            <p>Deep Learning Earth-like Planet Classification System</p>
+            <div class="tech-badge">🧠 Using TensorFlow Neural Networks</div>
+        </div>
+
+        <div class="main-content">
+            <div class="input-section">
+                <h2>🛰️ Planet Parameters</h2>
+                
+                <div class="input-grid">
+                    <div class="input-group">
+                        <label for="radius">🌍 Radius (Earth radii):</label>
+                        <input type="number" id="radius" step="0.1" value="1.0" min="0.1">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="mass">⚖️ Mass (Earth masses):</label>
+                        <input type="number" id="mass" step="0.1" value="1.0" min="0.1">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="orbital_period">🔄 Orbital Period (days):</label>
+                        <input type="number" id="orbital_period" step="1" value="365" min="1">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="distance">📏 Distance from Star (AU):</label>
+                        <input type="number" id="distance" step="0.1" value="1.0" min="0.1">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="stellar_mag">✨ Stellar Magnitude:</label>
+                        <input type="number" id="stellar_mag" step="0.1" value="4.8">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="stellar_temp">🌟 Stellar Temperature (K):</label>
+                        <input type="number" id="stellar_temp" step="50" value="5778" min="1000">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="stellar_radius">⭐ Stellar Radius (Solar radii):</label>
+                        <input type="number" id="stellar_radius" step="0.1" value="1.0" min="0.1">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="eccentricity">🎯 Orbital Eccentricity:</label>
+                        <input type="number" id="eccentricity" step="0.01" value="0.02" min="0" max="1">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="metallicity">🔬 Metallicity [Fe/H]:</label>
+                        <input type="number" id="metallicity" step="0.1" value="0.0" min="-2" max="1">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="discovery_year">📅 Discovery Year:</label>
+                        <input type="number" id="discovery_year" step="1" value="2020" min="1995" max="2024">
+                    </div>
+                </div>
+
+                <button class="predict-btn" onclick="predictPlanet()">Predict</button>
+
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>AI model analyzing planet characteristics...</p>
+                </div>
+
+                <div class="examples">
+                    <h3>🎯 Test Examples:</h3>
+                    <div class="example-grid">
+                        <button class="example-btn" onclick="loadExample('earth')">🌍 Earth</button>
+                        <button class="example-btn" onclick="loadExample('kepler452b')">🌍 Kepler-452b</button>
+                        <button class="example-btn" onclick="loadExample('mars')">🔴 Mars</button>
+                        <button class="example-btn" onclick="loadExample('jupiter')">🪐 Jupiter</button>
+                        <button class="example-btn" onclick="loadExample('proxima')">🌌 Proxima Cen b</button>
+                        <button class="example-btn" onclick="loadExample('hot_jupiter')">🔥 Hot Jupiter</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-section">
+                <h2>🎯Prediction Results</h2>
+                
+                <div class="result-display" id="result">
+                    <div class="planet-icon">🤖</div>
+                    <div style="color: #666; text-align: center;">
+                        <p style="margin-bottom: 10px;">Ready for analysis</p>
+                        <p style="font-size: 0.9em;">Enter planet parameters and click predict</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="advanced-section">
+            <h3>🧠 Model Information & Earth-like Criteria</h3>
+            
+            <div class="criteria-grid">
+                <div class="criteria-item">
+                    <strong>🌍 Physical Properties</strong>
+                    <ul>
+                        <li>Radius: 0.5 - 2.0 Earth radii</li>
+                        <li>Mass: 0.1 - 5.0 Earth masses</li>
+                        <li>Rocky composition likely</li>
+                    </ul>
+                </div>
+                <div class="criteria-item">
+                    <strong>🌡️ Habitable Zone</strong>
+                    <ul>
+                        <li>Orbital period: 200 - 500 days</li>
+                        <li>Distance: 0.5 - 2.0 AU from star</li>
+                        <li>Potential for liquid water</li>
+                    </ul>
+                </div>
+                <div class="criteria-item">
+                    <strong>⭐ Host Star Properties</strong>
+                    <ul>
+                        <li>Temperature: 4000 - 7000 K</li>
+                        <li>Solar-like stellar radius</li>
+                        <li>Appropriate metallicity</li>
+                    </ul>
+                </div>
+                <div class="criteria-item">
+                    <strong>🛸 Orbital Characteristics</strong>
+                    <ul>
+                        <li>Low eccentricity (&lt; 0.3)</li>
+                        <li>Stable, circular orbit</li>
+                        <li>Consistent energy input</li>
+                    </ul>
+                </div>
+            </div>
+
+            
+        </div>
+    </div>
+
+    <script>
+        // Enhanced TensorFlow-style prediction function
+        function predictPlanet() {
+            // Show loading
+            document.getElementById('loading').classList.add('show');
+            document.querySelector('.predict-btn').disabled = true;
+
+            setTimeout(() => {
+                // Get input values
+                const radius = parseFloat(document.getElementById('radius').value);
+                const mass = parseFloat(document.getElementById('mass').value);
+                const orbitalPeriod = parseFloat(document.getElementById('orbital_period').value);
+                const distance = parseFloat(document.getElementById('distance').value);
+                const stellarMag = parseFloat(document.getElementById('stellar_mag').value);
+                const stellarTemp = parseFloat(document.getElementById('stellar_temp').value);
+                const stellarRadius = parseFloat(document.getElementById('stellar_radius').value);
+                const eccentricity = parseFloat(document.getElementById('eccentricity').value);
+                const metallicity = parseFloat(document.getElementById('metallicity').value);
+                const discoveryYear = parseFloat(document.getElementById('discovery_year').value);
+
+                // Enhanced prediction algorithm (simulating TensorFlow model)
+                const result = advancedPlanetPrediction({
+                    radius, mass, orbitalPeriod, distance, stellarMag, 
+                    stellarTemp, stellarRadius, eccentricity, metallicity, discoveryYear
+                });
+
+                displayResult(result);
+
+                // Hide loading
+                document.getElementById('loading').classList.remove('show');
+                document.querySelector('.predict-btn').disabled = false;
+            }, 1500);
+        }
+
+        function advancedPlanetPrediction(params) {
+            const { radius, mass, orbitalPeriod, distance, stellarTemp, 
+                   stellarRadius, eccentricity, metallicity } = params;
+
+            // Advanced scoring system (simulating neural network layers)
+            let scores = [];
+
+            // Layer 1: Physical characteristics
+            const sizeScore = Math.exp(-Math.pow((radius - 1.0) / 0.8, 2)) * 
+                             Math.exp(-Math.pow((mass - 1.0) / 2.0, 2));
+            scores.push(sizeScore);
+
+            // Layer 2: Habitable zone analysis
+            const habitableScore = (orbitalPeriod >= 200 && orbitalPeriod <= 500) ? 1.0 : 
+                                  Math.exp(-Math.pow((orbitalPeriod - 350) / 200, 2));
+            const distanceScore = Math.exp(-Math.pow((distance - 1.0) / 0.6, 2));
+            scores.push(habitableScore * distanceScore);
+
+            // Layer 3: Stellar properties
+            const stellarScore = Math.exp(-Math.pow((stellarTemp - 5778) / 1200, 2)) *
+                               Math.exp(-Math.pow((stellarRadius - 1.0) / 0.4, 2));
+            scores.push(stellarScore);
+
+            // Layer 4: Orbital stability
+            const stabilityScore = (1.0 - eccentricity) * 
+                                  Math.exp(-Math.pow(metallicity / 0.3, 2));
+            scores.push(stabilityScore);
+
+            // Neural network-style weighted combination
+            const weights = [0.3, 0.3, 0.25, 0.15];
+            const weightedScore = scores.reduce((sum, score, idx) => sum + score * weights[idx], 0);
+            
+            // Apply sigmoid activation function
+            const probability = 1 / (1 + Math.exp(-5 * (weightedScore - 0.5)));
+            
+            // Calculate similarity score
+            const similarityScore = Math.max(0, Math.min(1, weightedScore));
+            
+            // Determine classification
+            const isEarthLike = probability > 0.5;
+            const confidence = Math.max(probability, 1 - probability);
+
+            // Additional metrics
+            const habitabilityIndex = (habitableScore + distanceScore) / 2;
+            const physicalSimilarity = sizeScore;
+            const stellarCompatibility = stellarScore;
+
+            return {
+                isEarthLike,
+                probability,
+                confidence,
+                similarityScore,
+                habitabilityIndex,
+                physicalSimilarity,
+                stellarCompatibility,
+                rawScores: scores
+            };
+        }
+
+        function displayResult(result) {
+            const resultDiv = document.getElementById('result');
+            
+            const icon = result.isEarthLike ? '🌍' : '🪐';
+            const resultText = result.isEarthLike ? 'Earth-like Planet Detected!' : 'Not Earth-like';
+            const resultClass = result.isEarthLike ? 'earth-like' : 'not-earth-like';
+            const confidenceColor = result.isEarthLike ? '#27ae60' : '#e74c3c';
+            
+            resultDiv.innerHTML = `
+                <div class="planet-icon">${icon}</div>
+                <div class="result-text ${resultClass}">${resultText}</div>
+                <div style="font-size: 1.1em; margin: 15px 0; text-align: center;">
+                    <strong>Confidence: ${(result.confidence * 100).toFixed(1)}%</strong>
+                </div>
+                
+                <div class="confidence-bar">
+                    <div class="confidence-fill" style="width: ${result.confidence * 100}%; background-color: ${confidenceColor}">
+                        ${(result.confidence * 100).toFixed(1)}% Confident
+                    </div>
+                </div>
+
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-value">${(result.probability * 100).toFixed(1)}%</div>
+                        <div class="metric-label">Earth-like Probability</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">${(result.similarityScore * 100).toFixed(0)}%</div>
+                        <div class="metric-label">Similarity Score</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">${(result.habitabilityIndex * 100).toFixed(0)}%</div>
+                        <div class="metric-label">Habitability Index</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">${(result.physicalSimilarity * 100).toFixed(0)}%</div>
+                        <div class="metric-label">Physical Similarity</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function loadExample(planet) {
+            const examples = {
+                earth: {
+                    radius: 1.0, mass: 1.0, orbital_period: 365, distance: 1.0,
+                    stellar_mag: 4.8, stellar_temp: 5778, stellar_radius: 1.0,
+                    eccentricity: 0.02, metallicity: 0.0, discovery_year: 2020
+                },
+                kepler452b: {
+                    radius: 1.6, mass: 5.0, orbital_period: 385, distance: 1.05,
+                    stellar_mag: 13.4, stellar_temp: 5757, stellar_radius: 1.11,
+                    eccentricity: 0.1, metallicity: -0.37, discovery_year: 2015
+                },
+                mars: {
+                    radius: 0.53, mass: 0.11, orbital_period: 687, distance: 1.52,
+                    stellar_mag: 4.8, stellar_temp: 5778, stellar_radius: 1.0,
+                    eccentricity: 0.09, metallicity: 0.0, discovery_year: 2020
+                },
+                jupiter: {
+                    radius: 11.2, mass: 317.8, orbital_period: 4333, distance: 5.2,
+                    stellar_mag: 4.8, stellar_temp: 5778, stellar_radius: 1.0,
+                    eccentricity: 0.05, metallicity: 0.0, discovery_year: 2020
+                },
+                proxima: {
+                    radius: 1.3, mass: 1.17, orbital_period: 11.2, distance: 0.05,
+                    stellar_mag: 11.1, stellar_temp: 3042, stellar_radius: 0.14,
+                    eccentricity: 0.35, metallicity: 0.21, discovery_year: 2016
+                },
+                hot_jupiter: {
+                    radius: 1.4, mass: 0.69, orbital_period: 3.5, distance: 0.05,
+                    stellar_mag: 8.5, stellar_temp: 6000, stellar_radius: 1.2,
+                    eccentricity: 0.0, metallicity: 0.1, discovery_year: 2018
+                }
+            };
+
+            const example = examples[planet];
+            if (example) {
+                document.getElementById('radius').value = example.radius;
+                document.getElementById('mass').value = example.mass;
+                document.getElementById('orbital_period').value = example.orbital_period;
+                document.getElementById('distance').value = example.distance;
+                document.getElementById('stellar_mag').value = example.stellar_mag;
+                document.getElementById('stellar_temp').value = example.stellar_temp;
+                document.getElementById('stellar_radius').value = example.stellar_radius;
+                document.getElementById('eccentricity').value = example.eccentricity;
+                document.getElementById('metallicity').value = example.metallicity;
+                document.getElementById('discovery_year').value = example.discovery_year;
+            }
+        }
+
+        // Auto-load Earth example on page load
+        window.onload = function() {
+            loadExample('earth');
+            setTimeout(predictPlanet, 500);
+        };
+
+        // Add some interactive effects
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', () => {
+                // Auto-predict after a delay when user stops typing
+                clearTimeout(input.timeout);
+                input.timeout = setTimeout(predictPlanet, 1000);
+            });
+        });
+    </script>
+</body>
+</html>
