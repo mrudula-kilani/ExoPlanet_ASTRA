@@ -70,7 +70,7 @@ Make sure you have the following installed:
 🌍 Example Output
 
 ### 🌐 Web Page Demo
-  ![Web Page Image](web_page_image.png)
-  ![Web Page Image 2](web_page_image2.png)
-  ![model_performance](model_performance_analysis.png)
+  ![Web Page Image](images/web_page_image.png)
+  ![Web Page Image 2](images/web_page_image2.png)
+  ![model_performance](images/model_performance_analysis.png)
   
