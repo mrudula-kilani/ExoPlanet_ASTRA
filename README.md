@@ -68,6 +68,10 @@ ExoPlanet_ASTRA/
     └── web_page_image2.png
 
 
+## 🌍 Example Output
+
+### Web Page Demo
+![Web Page Image](https://github.com/user-attachments/assets/705d296a-dd2a-4abe-88bb-fad529751857)
 
 
 <img width="678" height="594" alt="web_page_image" src="https://github.com/user-attachments/assets/705d296a-dd2a-4aba-88bb-fad529751857" />
