@@ -35,7 +35,6 @@ Make sure you have the following installed:
 2. Install dependencies:
    ```bash
    pip install -r requirements.txt
-   ▶️ Usage
 
 3. Run the main prediction script:
     ```bash
