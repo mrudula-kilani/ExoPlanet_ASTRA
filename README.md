@@ -72,5 +72,5 @@ Make sure you have the following installed:
 
 ### 🌐 Web Page Demo
   ![Web Page Image]("C:\Users\dell\Documents\output_files\web_page_image.png")
-  ![Web Page Image 2](ExoPlanet_ASTRA/web_page_image2.png)
+  ![Web Page Image 2](web_page_image2.png)
 web_page_image.png
