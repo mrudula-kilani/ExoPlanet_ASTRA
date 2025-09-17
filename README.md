@@ -66,3 +66,9 @@ ExoPlanet_ASTRA/
     ├── stellar_temperature_vs_similarity.png
     ├── web_page_image.png
     └── web_page_image2.png
+
+
+
+
+<img width="678" height="594" alt="web_page_image" src="https://github.com/user-attachments/assets/705d296a-dd2a-4aba-88bb-fad529751857" />
+
