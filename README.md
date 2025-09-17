@@ -45,6 +45,7 @@ Make sure you have the following installed:
    Open exo_planet_predictor.html in a browser to view the web interface
    
 ## 📁 Project Structure
+```plain text
 
 ExoPlanet_ASTRA/
 │
