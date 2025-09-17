@@ -70,7 +70,7 @@ Make sure you have the following installed:
     
 🌍 Example Output
 
-### Web Page Demo
-    ![Web Page Image]([[https://github.com/user-attachments/assets/705d296a-dd2a-4abe-88bb-fad529751857]
-
+### 🌐 Web Page Demo
+    ![Web Page Image](images/web_page_image.png)
+    ![Web Page Image 2](images/web_page_image2.png)
 
